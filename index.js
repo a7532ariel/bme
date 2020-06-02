@@ -27,7 +27,7 @@ function bufferToStream(binary) {
 app.use(bodyParser.json({
     limit: '10mb', extended: true
 }));                        
-app.use(express.static(path.join(__dirname, 'src/build')))
+app.use(express.static(path.join(__dirname, '/build')))
 const apiUrl = "https://140.112.29.224:1234/recognize"
 
 // Serve our base route that returns a Hellow World cow
@@ -56,7 +56,7 @@ app.post('/api/recognize', upload.single('file'), cors(), async (req, res, next)
 })
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname + '/src/build/index.html'))
+  res.sendFile(path.join(__dirname + '/build/index.html'))
 })
 
 // Choose the port and start the server
