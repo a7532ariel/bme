@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Pause_Img from './assests/pause_button@2x.png'
 import Record_Img from './assests/record_button@2x.png'
-import './App.css';
+import './App.scss';
 import RecordRTC from 'recordrtc';
 
 let recorder;
@@ -12,6 +12,7 @@ const mediaConstraints = {
 function App() {
   const [isRecording, setIsRecording] = useState(false)
   const [recognizeResult, setRecognizeResult] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   function onMediaSuccess(stream) {
     recorder = RecordRTC(stream, {
@@ -37,6 +38,7 @@ function App() {
 
   const stopRecording =  () => {
     setIsRecording(false)
+    setIsLoading(true)
     recorder.stopRecording(function () {
       let blob = recorder.getBlob();
       let form = new FormData();
@@ -51,6 +53,7 @@ function App() {
       .then(result => {
         console.log(result)
         setRecognizeResult(result)
+        setIsLoading(false)
       })
       .catch(error => console.log('error', error)); 
     })
@@ -71,9 +74,23 @@ function App() {
             }
           </div>
           {
+            isLoading === true &&
+            <div class="loaders">
+              <div class="loader">
+                <div class="loader-inner line-scale">
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                </div>
+              </div>
+            </div>
+          }
+          {
             recognizeResult !== '' && recognizeResult !== undefined &&
             <p>
-              result: {recognizeResult}
+              {recognizeResult}
             </p>
           }
         </div>
