@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Pause_Img from './assests/pause_button@2x.png'
 import Record_Img from './assests/record_button@2x.png'
 import './App.css';
@@ -18,6 +18,8 @@ function App() {
 
   function onMediaSuccess(stream) {
     mediaRecorder = new MediaStreamRecorder(stream);
+    mediaRecorder.sampleRate = 16000;
+    mediaRecorder.audioChannels = 1;
     mediaRecorder.mimeType = 'audio/wav'; // check this line for audio/wav
     mediaRecorder.ondataavailable = function (blob) {
         console.log('chunk of real-time data is: ', blob);

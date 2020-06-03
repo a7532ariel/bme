@@ -40,6 +40,10 @@ app.post('/api/recognize', upload.single('file'), cors(), async (req, res, next)
     fetch(apiUrl, {
         method: 'POST',
         body: req.file.buffer,
+        // body: JSON.stringify({
+        //     'buffer': req.file.buffer,
+        //     'filename': 'hahaha'
+        // })
         agent: new https.Agent({  
             rejectUnauthorized: false
         })
