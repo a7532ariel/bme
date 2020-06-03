@@ -2,30 +2,26 @@ import React, { useState } from 'react';
 import Pause_Img from './assests/pause_button@2x.png'
 import Record_Img from './assests/record_button@2x.png'
 import './App.css';
+import RecordRTC from 'recordrtc';
 
-var MediaStreamRecorder = require('msr');
-
-var mediaConstraints = {
+let recorder;
+const mediaConstraints = {
   audio: true
 };
-
-let b = []
-let mediaRecorder;
 
 function App() {
   const [isRecording, setIsRecording] = useState(false)
   const [recognizeResult, setRecognizeResult] = useState('')
 
   function onMediaSuccess(stream) {
-    mediaRecorder = new MediaStreamRecorder(stream);
-    mediaRecorder.sampleRate = 16000;
-    mediaRecorder.audioChannels = 1;
-    mediaRecorder.mimeType = 'audio/wav'; // check this line for audio/wav
-    mediaRecorder.ondataavailable = function (blob) {
-        console.log('chunk of real-time data is: ', blob);
-        b.push(blob);
-    };
-    mediaRecorder.start();
+    recorder = RecordRTC(stream, {
+      type: 'audio',
+      mimeType: 'audio/wav',
+      recorderType: RecordRTC.StereoAudioRecorder,
+      numberOfAudioChannels: 1,
+      desiredSampRate: 16000
+    });
+    recorder.startRecording();
   }
 
   function onMediaError () {
@@ -39,14 +35,12 @@ function App() {
     navigator.getWebcam(mediaConstraints, onMediaSuccess, onMediaError);
   }
 
-  const stopRecording = () => {
-    mediaRecorder.stop()
+  const stopRecording =  () => {
     setIsRecording(false)
-    window.ConcatenateBlobs(b, 'audio/wav', async function(concatenatedBlob) {
-      console.log('recordedBlob is: ', concatenatedBlob);
-
+    recorder.stopRecording(function () {
+      let blob = recorder.getBlob();
       let form = new FormData();
-      form.append('file', concatenatedBlob, 'test');
+      form.append('file', blob, 'test');
       
       let requestOptions = {
         method: 'POST',
@@ -59,9 +53,7 @@ function App() {
         setRecognizeResult(result)
       })
       .catch(error => console.log('error', error)); 
-      
-    });
-    b = [];
+    })
   }
 
   return (
