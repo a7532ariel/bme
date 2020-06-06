@@ -45,21 +45,34 @@
   flex: 0 1 auto;
   flex-direction: row;
   flex-wrap: wrap;
-.loader {
-  box-sizing: border-box;
-  display: flex;
-  flex: 0 1 auto;
-  flex-direction: column;
-  flex-grow: 1;
-  flex-shrink: 0;
-  flex-basis: 25%;
-  max-width: 50%;
-  width: 50%;
-  margin: 0 auto;
-  height: 10vh;
-  align-items: center;
-  justify-content: center;
-  perspective: 500px;
-  
+  .loader {
+    box-sizing: border-box;
+    display: flex;
+    flex: 0 1 auto;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: 25%;
+    max-width: 50%;
+    width: 50%;
+    margin: 0 auto;
+    height: 10vh;
+    align-items: center;
+    justify-content: center;
+    perspective: 500px;
+    
+  }
 }
+
+.finetune {
+  border-radius: 20%;
+  padding: 5px 15px;
+  height: 10vh;
+  width: 40vw;
+  font-size: 2vh;
+  background-color: #e4e2de;
+}
+
+textarea:focus, input:focus{
+  outline: none; 
 }
