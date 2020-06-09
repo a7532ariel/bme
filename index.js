@@ -20,6 +20,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use(express.static(path.join(__dirname, '/build')))
+
 // const apiUrl = "http://0.0.0.0:1234"
 const apiUrl = "https://140.112.29.224:1234"
 

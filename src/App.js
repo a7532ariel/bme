@@ -1,25 +1,42 @@
 import React, { useState } from 'react';
-import Pause_Img from './assests/pause_button@2x.png'
-import Record_Img from './assests/record_button@2x.png'
 import './App.scss';
+import moment from 'moment';
 import RecordRTC from 'recordrtc';
 import ReactPlayer from 'react-player'
-import moment from 'moment';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+import Pause_Img from './assests/pause_button@2x.png'
+import Record_Img from './assests/record_button@2x.png'
 
 let recorder;
 const mediaConstraints = {
   audio: true
 };
 
+function Loader() {
+  return (
+      <div className="loaders">
+        <div className="loader">
+          <div className="loader-inner line-scale">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+      </div>
+  )
+}
+
 function App() {
-  const [isRecording, setIsRecording] = useState(false)
-  const [recognizeResult, setRecognizeResult] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [isRecording, setIsRecording] = useState(false)
   const [fileName, setFileName] = useState('')
   const [fineTune, setFineTune] = useState('')
   const [ttsURL, setTTSURL] = useState('')
+  const [recognizeResult, setRecognizeResult] = useState('')
 
   function onMediaSuccess(stream) {
     recorder = RecordRTC(stream, {
@@ -104,6 +121,7 @@ function App() {
     })
     .catch(error => console.log('error', error)); 
   }
+  
   const tts = (result) => {
     const textIndex = result.indexOf('|')
     const textToSpeech = result.substring(textIndex+1)
@@ -142,17 +160,7 @@ function App() {
           </div>
           {
             isLoading === true &&
-            <div className="loaders">
-              <div className="loader">
-                <div className="loader-inner line-scale">
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                </div>
-              </div>
-            </div>
+            <Loader />
           }
           {
             recognizeResult !== '' && recognizeResult !== undefined &&
@@ -178,17 +186,7 @@ function App() {
               }
               {
                 (ttsURL === '' || ttsURL === undefined) && 
-                <div className="loaders">
-                  <div className="loader">
-                    <div className="loader-inner line-scale">
-                      <div></div>
-                      <div></div>
-                      <div></div>
-                      <div></div>
-                      <div></div>
-                    </div>
-                  </div>
-                </div>
+                <Loader />
               }
             </div>
           }
