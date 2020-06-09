@@ -23,7 +23,7 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: #615942;
 }
 
 .App-link {
@@ -65,6 +65,7 @@
 }
 
 .finetune {
+  border: none;
   border-radius: 20%;
   padding: 5px 15px;
   height: 10vh;
@@ -72,7 +73,31 @@
   font-size: 2vh;
   background-color: #e4e2de;
 }
+.finetune:focus {
+  outline: none;
+}
 
-textarea:focus, input:focus{
+textarea:focus, input:focus button:focus {
+  outline: none; 
+}
+
+.result-container {
+  margin-bottom: 1vh;
+}
+
+.finetune-button {
+  height: 5vh;
+  border-radius: 40%;
+  margin-left: 3vw;
+  border: none;
+  padding: 5px 15px;
+}
+.finetune-button:hover {
+  background-color: #615942;
+  color: white;
+  outline: none; 
+  border: none;
+}
+.finetune-button:focus {
   outline: none; 
 }

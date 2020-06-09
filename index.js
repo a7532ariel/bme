@@ -23,6 +23,22 @@ app.use(express.static(path.join(__dirname, '/build')))
 // const apiUrl = "http://0.0.0.0:1234"
 const apiUrl = "https://140.112.29.224:1234"
 
+app.post('/api/tts', cors(), (req, res, next) => {
+  console.log(req.body.text)
+  const params = new URLSearchParams({ text: req.body.text })
+  fetch(`${apiUrl}/tts?` + params, {
+    method: 'GET',
+    agent: new https.Agent({  
+        rejectUnauthorized: false
+    })
+  })
+  .then(response => response.buffer())
+  .then(result => {
+      res.set('Content-Type', 'audio/wav'); 
+      res.send(result)
+  })
+})
+
 // Serve our base route that returns a Hellow World cow
 app.post('/api/recognize', upload.single('file'), cors(), (req, res, next) => {
   console.log(req.file)

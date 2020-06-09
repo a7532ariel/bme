@@ -3,6 +3,7 @@ import Pause_Img from './assests/pause_button@2x.png'
 import Record_Img from './assests/record_button@2x.png'
 import './App.scss';
 import RecordRTC from 'recordrtc';
+import ReactPlayer from 'react-player'
 import moment from 'moment';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -18,6 +19,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [fileName, setFileName] = useState('')
   const [fineTune, setFineTune] = useState('')
+  const [ttsURL, setTTSURL] = useState('')
 
   function onMediaSuccess(stream) {
     recorder = RecordRTC(stream, {
@@ -62,6 +64,7 @@ function App() {
         setRecognizeResult(result.result)
         setFileName(result.filename)
         setIsLoading(false)
+        tts(result.result)
       })
       .catch(error => console.log('error', error)); 
     })
@@ -99,7 +102,28 @@ function App() {
     })
     .catch(error => console.log('error', error)); 
   }
-
+  const tts = (result) => {
+    const textIndex = result.indexOf('|')
+    const textToSpeech = result.substring(textIndex+1)
+    let requestOptions = {
+      method: 'POST',
+      body: JSON.stringify({
+        text: textToSpeech
+      }),
+      headers: {
+        'content-type': 'application/json'
+      }
+    };
+    fetch('/api/tts', requestOptions)
+    .then(response => response.blob())
+    .then(result => {
+      console.log(result)
+      const url = URL.createObjectURL(result)
+      setTTSURL(url)
+    })
+    .catch(error => console.log('error', error));
+  }
+ 
   return (
     <div className="App">
       <header className="App-header">
@@ -130,9 +154,24 @@ function App() {
           }
           {
             recognizeResult !== '' && recognizeResult !== undefined &&
-            <p>
-              {recognizeResult}
-            </p>
+            <div className="result-container">
+              <p>
+                {recognizeResult}
+              </p>
+              <ReactPlayer
+                url={ttsURL}
+                className='react-player'
+                playing
+                controls
+                width='70vw'
+                height='5vh'
+                config={{
+                  file: {
+                    forceAudio: true
+                  }
+                }}
+              />
+            </div>
           }
           {
             fileName !== '' &&
