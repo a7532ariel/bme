@@ -40,6 +40,8 @@ function App() {
     setIsRecording(true)
     setRecognizeResult('')
     setFileName('')
+    setTTSURL('')
+    setFineTune('')
     navigator.getWebcam = (navigator.getUserMedia || navigator.webKitGetUserMedia || navigator.moxGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
     navigator.getWebcam(mediaConstraints, onMediaSuccess, onMediaError);
   }
@@ -158,19 +160,36 @@ function App() {
               <p>
                 {recognizeResult}
               </p>
-              <ReactPlayer
-                url={ttsURL}
-                className='react-player'
-                playing
-                controls
-                width='70vw'
-                height='5vh'
-                config={{
-                  file: {
-                    forceAudio: true
-                  }
-                }}
-              />
+              {
+                ttsURL !== '' && ttsURL !== undefined && 
+                <ReactPlayer
+                  url={ttsURL}
+                  className='react-player'
+                  playing
+                  controls
+                  width='70vw'
+                  height='5vh'
+                  config={{
+                    file: {
+                      forceAudio: true
+                    }
+                  }}
+                />
+              }
+              {
+                (ttsURL === '' || ttsURL === undefined) && 
+                <div className="loaders">
+                  <div className="loader">
+                    <div className="loader-inner line-scale">
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                    </div>
+                  </div>
+                </div>
+              }
             </div>
           }
           {
